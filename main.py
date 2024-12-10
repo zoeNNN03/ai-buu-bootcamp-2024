@@ -19,9 +19,9 @@ from typing import List
 from sentence_transformers import SentenceTransformer
 from contextlib import asynccontextmanager
 
-ACCESS_TOKEN = "O0Vi8xE7Wh3A6BahSUC6O0VKR7RxR0p27jHBl1h39OdH9/d3cEtmrS4QT91BUEDmmrRqLrUiKLVxlJcggXWQ/MwNBJttPBjKEw8Oifg9O06on+Ab3UzbvQ7E8W56z5GeOIHvROzUsRVagavLPiTIbwdB04t89/1O/w1cDnyilFU="
-CHANNEL_SECRET = "701c99f9fa1b4d0261e6f4dedcce76c8"
-GEMINI_API_KEY = "AIzaSyBrn9N8g0RnZrYhW-vFe3Tb2ytibKcsU3E"
+ACCESS_TOKEN = "your-access-token"
+CHANNEL_SECRET = "your-channel-secret"
+GEMINI_API_KEY = "your-gemini-api-key"
 
 configuration = Configuration(access_token=ACCESS_TOKEN)
 handler = WebhookHandler(channel_secret=CHANNEL_SECRET)
