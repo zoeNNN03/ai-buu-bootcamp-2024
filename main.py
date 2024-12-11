@@ -314,7 +314,7 @@ def handle_message(event: MessageEvent):
                 )
                 return
             
-            if image.size > 1024 * 1024:
+            if image.size[0] * image.size[1] > 1024 * 1024:
                 line_bot_api.reply_message_with_http_info(
                     ReplyMessageRequest(
                         replyToken=event.reply_token,
