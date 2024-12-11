@@ -166,15 +166,6 @@ class GeminiRAGSystem:
         # เปิดภาพจากข้อมูลที่ส่งมา
         image = Image.open(BytesIO(image_content))
 
-        # ปรับขนาดของภาพ
-        image.thumbnail((512, 512))
-        image_bytes = BytesIO()
-        image.save(image_bytes, format="JPEG")
-        image_bytes.seek(0)
-        image = image_bytes.read()
-
-        os.remove(image_bytes)
-        
         # สร้างคำอธิบายของภาพ
         initial_description = self.generation_model.generate_content(
             ["Provide a detailed, objective description of this image", image],
@@ -322,6 +313,14 @@ def handle_message(event: MessageEvent):
                     )
                 )
                 return
+            
+            if image.size > 1024 * 1024:
+                line_bot_api.reply_message_with_http_info(
+                    ReplyMessageRequest(
+                        replyToken=event.reply_token,
+                        messages=[TextMessage(text="ขอโทษครับ ภาพมีขนาดใหญ่เกินไป กรุณาลดขนาดภาพและลองใหม่อีกครั้ง")]
+                    )
+                )
 
             try:
                 # ส่งข้อมูลภาพไปยัง Gemini เพื่อทำการประมวลผล
@@ -360,6 +359,9 @@ async def image_query(
     query: str = Form("อธิบายภาพนี้ให้ละเอียด"),
     use_rag: bool = Form(True)
 ):
+    if file.size > 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image size too large")
+
     # ิ อ่านข้อมูลภาพจากไฟล์ที่ส่งมา
     contents = await file.read()
 
