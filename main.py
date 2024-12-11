@@ -319,7 +319,7 @@ def handle_message(event: MessageEvent):
 
             try:
                 # ส่งข้อมูลภาพไปยัง Gemini เพื่อทำการประมวลผล
-                gemini_response = gemini.process_image_query(image,
+                gemini_response = gemini.process_image_query(image_data,
                                                              query="อธิบายภาพนี้ให้ละเอียด", 
                                                              use_rag=True)
                 # นำข้อมูลที่ได้จาก Gemini มาใช้งาน
