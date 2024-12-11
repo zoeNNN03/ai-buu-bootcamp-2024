@@ -27,11 +27,11 @@ from contextlib import asynccontextmanager
 app = FastAPI()
 
 # ข้อมูล token และ channel secret สำหรับ LINE
-ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN", "")
-CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "")
+ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN", "O0Vi8xE7Wh3A6BahSUC6O0VKR7RxR0p27jHBl1h39OdH9/d3cEtmrS4QT91BUEDmmrRqLrUiKLVxlJcggXWQ/MwNBJttPBjKEw8Oifg9O06on+Ab3UzbvQ7E8W56z5GeOIHvROzUsRVagavLPiTIbwdB04t89/1O/w1cDnyilFU=")
+CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "701c99f9fa1b4d0261e6f4dedcce76c8")
 
 # ข้อมูล Gemini api key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyBrn9N8g0RnZrYhW-vFe3Tb2ytibKcsU3E")
 
 # การเชื่อมต่อ และตั้งค่าข้อมูลเพื่อเรียกใช้งาน LINE Messaging API
 configuration = Configuration(access_token=ACCESS_TOKEN)
@@ -165,15 +165,24 @@ class GeminiRAGSystem:
         """
         # เปิดภาพจากข้อมูลที่ส่งมา
         image = Image.open(BytesIO(image_content))
+
+        # ปรับขนาดของภาพ
+        image.thumbnail((512, 512))
+        image_bytes = BytesIO()
+        image.save(image_bytes, format="JPEG")
+        image_bytes.seek(0)
+        image = image_bytes.read()
+
+        os.remove(image_bytes)
         
         # สร้างคำอธิบายของภาพ
         initial_description = self.generation_model.generate_content(
             ["Provide a detailed, objective description of this image", image],
             generation_config={
-                "max_output_tokens": 1024,
+                "max_output_tokens": 256,
                 "temperature": 0.4,
-                "top_p": 1,
-                "top_k": 32
+                "top_p": 0.9,
+                "top_k": 8
             }
         ).text
         
@@ -205,18 +214,15 @@ class GeminiRAGSystem:
             response = self.generation_model.generate_content(
                 [enhanced_prompt, image],
                 generation_config={
-                    "max_output_tokens": 2048,
-                    "temperature": 0.5,
-                    "top_p": 1,
-                    "top_k": 32
+                    "max_output_tokens": 256,
+                    "temperature": 0.4,
+                    "top_p": 0.9,
+                    "top_k": 8
                 }
             )
             
             return {
-                "image_description": initial_description,
-                "retrieved_context": context,
                 "final_response": response.text,
-                "full_prompt": enhanced_prompt
             }
         except Exception as e:
             return {
