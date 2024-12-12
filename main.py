@@ -27,18 +27,18 @@ from contextlib import asynccontextmanager
 app = FastAPI()
 
 # ข้อมูล token และ channel secret สำหรับ LINE
-# ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN", "O0Vi8xE7Wh3A6BahSUC6O0VKR7RxR0p27jHBl1h39OdH9/d3cEtmrS4QT91BUEDmmrRqLrUiKLVxlJcggXWQ/MwNBJttPBjKEw8Oifg9O06on+Ab3UzbvQ7E8W56z5GeOIHvROzUsRVagavLPiTIbwdB04t89/1O/w1cDnyilFU=")
-# CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "701c99f9fa1b4d0261e6f4dedcce76c8")
-
-# # ข้อมูล Gemini api key
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyBrn9N8g0RnZrYhW-vFe3Tb2ytibKcsU3E")
-
-# ข้อมูล token และ channel secret สำหรับ LINE
-ACCESS_TOKEN = "j0BFg4c3MQbI8ZzElLtfuInGeceV/TbQ9ysZz0qUY82znS6s9i+fu5/LEZ84kZu3BCknd/pyU5EIWSiwVP1fE5hdfIgnzTk6fLttGMAXsxfal4u6MY7n/TXK/i5TjQ66CxWle0yHAR+YWl2ydo/D5gdB04t89/1O/w1cDnyilFU="
-CHANNEL_SECRET = "0959e9e2f9ff09d4063b92412e9cafe3"
+ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN", "j0BFg4c3MQbI8ZzElLtfuInGeceV/TbQ9ysZz0qUY82znS6s9i+fu5/LEZ84kZu3BCknd/pyU5EIWSiwVP1fE5hdfIgnzTk6fLttGMAXsxfal4u6MY7n/TXK/i5TjQ66CxWle0yHAR+YWl2ydo/D5gdB04t89/1O/w1cDnyilFU=")
+CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "0959e9e2f9ff09d4063b92412e9cafe3")
 
 # ข้อมูล Gemini api key
-GEMINI_API_KEY = "AIzaSyB1f2FrwTTOwLVAnIEhSPwI3twUrE9hivk"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyB1f2FrwTTOwLVAnIEhSPwI3twUrE9hivk")
+
+# ข้อมูล token และ channel secret สำหรับ LINE
+# ACCESS_TOKEN = "j0BFg4c3MQbI8ZzElLtfuInGeceV/TbQ9ysZz0qUY82znS6s9i+fu5/LEZ84kZu3BCknd/pyU5EIWSiwVP1fE5hdfIgnzTk6fLttGMAXsxfal4u6MY7n/TXK/i5TjQ66CxWle0yHAR+YWl2ydo/D5gdB04t89/1O/w1cDnyilFU="
+# CHANNEL_SECRET = "0959e9e2f9ff09d4063b92412e9cafe3"
+
+# # ข้อมูล Gemini api key
+# GEMINI_API_KEY = "AIzaSyB1f2FrwTTOwLVAnIEhSPwI3twUrE9hivk"
 
 # การเชื่อมต่อ และตั้งค่าข้อมูลเพื่อเรียกใช้งาน LINE Messaging API
 configuration = Configuration(access_token=ACCESS_TOKEN)
@@ -247,10 +247,11 @@ gemini = GeminiRAGSystem(
 async def lifespan(app: FastAPI):
     # ข้อมูลตัวอย่างที่ใช้สำหรับ Gemini
     sample_documents = [
-        "จิรภัทร ทำดี คือ ชายหนุ่มที่มีความสามารถในการเขียนโปรแกรมที่มาจากบริษัท ClickNext ที่เป็นบริษัทด้านการพัฒนาโปรแกรมที่มีชื่อเสียง",
-        "จิรภัทร ทำดี มีชื่อเล่นว่า ปาล์ม เกิดวันที่ 25 มกราคม 2555 ที่จังหวัดสระบุรี ศึกษาจบจากมหาวิทยาลัยบูรพา สาขาวิศวกรรมคอมพิวเตอร์",
-        "งาน BUU-Bootcamp-2024 จัดที่มหาวิทยาลัยบูรพา ในวันที่ 25 มกราคม ปีค.ศ.2024 โดยมีการจัดกิจกรรมต่าง ๆ ที่เกี่ยวข้องกับการพัฒนาซอฟต์แวร์ เวลา 9:00 น. - 16:00 น.",
-        "มหาวิทยาลัยบูรพา สาขาวิชาAI ปีการศึกษา 2565 มีนักศึกษาจำนวน 100 คน มีอาจารย์ที่ปรึกษา 10 คน"
+        "จักรินทร์ พูนจบ คือ ชายหนุ่มที่มีหล่อที่สุดในโลก",
+        "จักรินทร์ พูนจบ มีชื่อเล่นว่า นัท ศึกษาจบจากมหาวิทยาลัยบูรพา",
+        "รายละเอียดของงาน BUU-Bootcamp-2024 จัดที่มหาวิทยาลัยบูรพา ในวันที่ 12 ธันวาคม ปีค.ศ.2024 โดยมีการจัดกิจกรรมต่าง ๆ ตั้งแต่เวลา 8:30 น. - 16:30 น.",
+        "มหาวิทยาลัยบูรพา สาขาวิชาAI ปีการศึกษา 2565 มีนักศึกษาจำนวน 100 คน มีอาจารย์ที่ปรึกษา 10 คน",
+        "ทีม AI ของ ChickNext มี\nพี่ A ตำแหน่ง PM\nพี่ B ตำแหน่ง BA\nพี่ C ตำแหน่ง DEV\nพี่ D ตำแหน่ง DEV"
     ]
     
     # เพิ่มข้อมูลตัวอย่างลงใน Gemini
